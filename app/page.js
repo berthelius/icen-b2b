@@ -453,12 +453,12 @@ export default function App() {
                 <div className="hstat-label">CAC canal embajador</div>
               </div>
               <div className="hstat">
-                <div className="hstat-val amber">vs €416</div>
-                <div className="hstat-label">CPA canal ads actual</div>
+                <div className="hstat-val" style={{ color: C.fundae }}>€80-150</div>
+                <div className="hstat-label">CAC canal FUNDAE real</div>
               </div>
               <div className="hstat">
-                <div className="hstat-val blue">−41%</div>
-                <div className="hstat-label">reducción coste adq.</div>
+                <div className="hstat-val amber">vs €416</div>
+                <div className="hstat-label">CPA canal ads actual</div>
               </div>
             </div>
           </header>
@@ -603,21 +603,49 @@ export default function App() {
                   <div className="sec-eyebrow">Estrategia · Dual track</div>
                   <h2 className="sec-title">España y LATAM: misma estructura, diferente monetización</h2>
                   <p className="sec-desc">
-                    La propuesta de valor B2B es idéntica en ambos mercados: ICEN Connect como gancho sin fricción,
-                    convenio institucional, y programa de embajadores. La diferencia está en el nivel 2:
-                    FUNDAE solo aplica en España; en LATAM el equivalente es volumen corporativo con descuento.
+                    La propuesta de valor B2B es idéntica en ambos mercados: ICEN Connect como gancho sin fricción, 
+                    convenio institucional, y programa de embajadores. La diferencia está en el nivel 2: 
+                    FUNDAE solo aplica en España con el modelo modular; en LATAM el equivalente es volumen corporativo con descuento.
                   </p>
                 </div>
 
-                <div style={{ marginBottom: 24 }}>
+                {/* FUNDAE modular callout */}
+                <div className="card" style={{ marginBottom: 24, background: "rgba(139,92,246,0.04)", borderColor: "rgba(139,92,246,0.2)" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.2em", color: C.fundae, textTransform: "uppercase", marginBottom: 12 }}>Mecánica clave · Modelo modular FUNDAE</div>
+                  <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, marginBottom: 12, color: C.white }}>
+                    FUNDAE es el <em style={{ color: C.fundae }}>front</em> — el máster completo es el <em style={{ color: C.accent }}>back-end premium</em>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr auto 1fr auto 1fr", gap: 8, alignItems: "center" }}>
+                    {[
+                      { label: "Módulo FUNDAE", sub: "60-80h · €400-900", color: C.fundae },
+                      null,
+                      { label: "Satisfacción", sub: "1-2 módulos cursados", color: C.grayLight },
+                      null,
+                      { label: "Upgrade al Máster", sub: "Paga solo la diferencia", color: C.accent },
+                      null,
+                      { label: "LTV completo", sub: "€4.881 – módulos FUNDAE", color: C.amber },
+                    ].map((item, i) => item === null ? (
+                      <div key={i} style={{ textAlign: "center", color: C.fundae, fontSize: 18 }}>→</div>
+                    ) : (
+                      <div key={i} style={{ background: "rgba(0,0,0,0.3)", border: `1px solid ${item.color}33`, borderRadius: 6, padding: "10px 14px" }}>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: item.color, marginBottom: 3 }}>{item.label}</div>
+                        <div style={{ fontSize: 11, color: C.gray }}>{item.sub}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 12, fontSize: 12, color: C.grayLight, lineHeight: 1.6 }}>
+                    Los cursos FUNDAE son contenido del LMS reagrupado (60-80h por módulo, 2-6 por máster). No hay que construir nada nuevo. El reconocimiento interno es de ICEN — 
+                    no convalidación universitaria oficial, sino descuento equivalente aplicado al precio del máster completo. Comunicación clara y auditable.
+                  </div>
+                </div>
                   <div className="card" style={{ marginBottom: 16, background: "rgba(0,229,160,0.03)", borderColor: "rgba(0,229,160,0.15)" }}>
                     <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
                       <div style={{ flexShrink: 0, width: 40, height: 40, borderRadius: 8, background: "rgba(0,229,160,0.1)", border: `1px solid rgba(0,229,160,0.2)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🔗</div>
                       <div>
                         <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 4 }}>ICEN Connect — El gancho universal <span style={{ color: C.accent }}>(aplica en ambos mercados)</span></div>
                         <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.65 }}>
-                          Bolsa de empleo sectorial gratuita. ICEN difunde las ofertas de empleo de la empresa a sus 54.679 contactos del sector deporte, salud y nutrición más sus redes sociales.
-                          La empresa no paga nada, gana visibilidad y candidatos cualificados. ICEN gana un contacto legítimo, seguimiento en RRSS con justificación natural
+                          Bolsa de empleo sectorial gratuita. ICEN difunde las ofertas de empleo de la empresa a sus 54.679 contactos del sector deporte, salud y nutrición más sus redes sociales. 
+                          La empresa no paga nada, gana visibilidad y candidatos cualificados. ICEN gana un contacto legítimo, seguimiento en RRSS con justificación natural 
                           (<em>"síguenos para que tus empleados vean las oportunidades"</em>) y una relación donde ya le deben algo antes de hablar de formación.
                         </div>
                       </div>
@@ -642,19 +670,19 @@ export default function App() {
                           badges: [{ label: "Gratis para ellos", cls: "badge-green" }, { label: "Gancho inicial", cls: "badge-green" }]
                         },
                         {
-                          num: "02", title: "FUNDAE — Formación bonificada 0€",
-                          desc: "Sus empleados se forman en Masters y FP oficiales ICEN usando los créditos de bonificación de la Seguridad Social. La empresa no desembolsa nada. ICEN cobra directamente de FUNDAE.",
-                          badges: [{ label: "Coste 0 para la empresa", cls: "badge-fundae" }, { label: "Solo España", cls: "badge-fundae" }]
+                          num: "02", title: "Catálogo modular FUNDAE — cursos 60-80h",
+                          desc: "No bonificamos el máster completo (€4.881 supera el crédito anual de la mayoría de empresas). Creamos 2-6 cursos de especialización por máster, reagrupando contenido ya en el LMS. Ticket por módulo: €400-900. La empresa usa sus créditos. Coste real para el empleado: €0.",
+                          badges: [{ label: "€0 para la empresa", cls: "badge-fundae" }, { label: "Contenido ya existe", cls: "badge-green" }, { label: "Solo España", cls: "badge-fundae" }]
                         },
                         {
-                          num: "03", title: "Programa Embajadores",
-                          desc: "10% descuento para empleados y contactos de la empresa. 5% de comisión para la empresa por cada matrícula cerrada. Código de referido único en CRM con tracking automático.",
-                          badges: [{ label: "+5% comisión empresa", cls: "badge-amber" }, { label: "−10% alumno", cls: "badge-amber" }]
+                          num: "03", title: "Upgrade al máster completo — upsell natural",
+                          desc: "El empleado hace 1-2 módulos FUNDAE y queda satisfecho. Puede completar el máster pagando solo la diferencia. ICEN aplica reconocimiento interno: los módulos ya cursados descuentan del precio final. El crédito de conversión se activa solo.",
+                          badges: [{ label: "FUNDAE → Máster", cls: "badge-fundae" }, { label: "Descuento diferencia", cls: "badge-amber" }, { label: "CAC €0 extra", cls: "badge-green" }]
                         },
                         {
-                          num: "04", title: "Renovación anual FUNDAE",
-                          desc: "Los créditos FUNDAE se renuevan cada año. La empresa entra en flujo de renovación automática: revisión de créditos disponibles en Q4 y plan de formación para el año siguiente.",
-                          badges: [{ label: "Recurrente", cls: "badge-fundae" }, { label: "Alto LTV", cls: "badge-green" }]
+                          num: "04", title: "Embajadores + Renovación anual",
+                          desc: "La empresa entra en programa embajadores: 5% comisión por referidos. Sus créditos FUNDAE se renuevan cada año — revisión automática Q4 para plan de formación siguiente. Una empresa bien trabajada genera matrículas durante años.",
+                          badges: [{ label: "+5% comisión", cls: "badge-amber" }, { label: "Recurrente año a año", cls: "badge-fundae" }]
                         },
                       ].map((step, i) => (
                         <div key={i}>
@@ -725,361 +753,362 @@ export default function App() {
               </div>
             )}
 
-            {tab === "secuencia" && (
+        {tab === "secuencia" && (
+          <div>
+            <div className="sec-header">
+              <div className="sec-eyebrow">Outreach · Secuencia automatizada n8n</div>
+              <h2 className="sec-title">D0 → D21: del primer contacto al cierre</h2>
+              <p className="sec-desc">
+                Cada empresa scrapeada entra en una secuencia automatizada de 21 días orquestada por n8n.
+                En el momento en que responde, sale del flujo automático y entra en gestión manual en Twenty CRM.
+                Sin respuesta en 30 días: archivo y reactivación automática a los 6 meses.
+              </p>
+            </div>
+
+            <div className="two-col">
               <div>
-                <div className="sec-header">
-                  <div className="sec-eyebrow">Outreach · Secuencia automatizada n8n</div>
-                  <h2 className="sec-title">D0 → D21: del primer contacto al cierre</h2>
-                  <p className="sec-desc">
-                    Cada empresa scrapeada entra en una secuencia automatizada de 21 días orquestada por n8n.
-                    En el momento en que responde, sale del flujo automático y entra en gestión manual en Twenty CRM.
-                    Sin respuesta en 30 días: archivo y reactivación automática a los 6 meses.
-                  </p>
-                </div>
-
-                <div className="two-col">
-                  <div>
-                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.2em", color: C.gray, textTransform: "uppercase", marginBottom: 20 }}>Secuencia completa</div>
-                    <div className="sequence-timeline">
-                      <div className="seq-line" />
-                      {sequenceItems.map((item, i) => (
-                        <div key={i} className="seq-item">
-                          <div className="seq-day">{item.day}</div>
-                          <div className="seq-dot">
-                            <div className="seq-dot-inner" style={{ borderColor: item.color, background: item.color + "22" }} />
-                          </div>
-                          <div className="seq-content">
-                            <div className="seq-channel" style={{ color: item.color }}>
-                              {channelIcons[item.channel]} {item.channel.toUpperCase()}
-                            </div>
-                            <div className="seq-subject">{item.subject}</div>
-                            <div className="seq-hook">{item.hook}</div>
-                            {item.trigger && <div className="seq-trigger">↳ {item.trigger}</div>}
-                          </div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.2em", color: C.gray, textTransform: "uppercase", marginBottom: 20 }}>Secuencia completa</div>
+                <div className="sequence-timeline">
+                  <div className="seq-line" />
+                  {sequenceItems.map((item, i) => (
+                    <div key={i} className="seq-item">
+                      <div className="seq-day">{item.day}</div>
+                      <div className="seq-dot">
+                        <div className="seq-dot-inner" style={{ borderColor: item.color, background: item.color + "22" }} />
+                      </div>
+                      <div className="seq-content">
+                        <div className="seq-channel" style={{ color: item.color }}>
+                          {channelIcons[item.channel]} {item.channel.toUpperCase()}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.2em", color: C.gray, textTransform: "uppercase", marginBottom: 20 }}>Lógica de bifurcación</div>
-                    <div className="card" style={{ marginBottom: 16 }}>
-                      <div style={{ fontWeight: 800, fontSize: 14, color: C.accent, marginBottom: 12 }}>✓ Si responde en cualquier punto</div>
-                      <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.65, marginBottom: 12 }}>
-                        Sale inmediatamente del flujo automático. Entra en Twenty CRM como oportunidad activa con todo el historial de interacción sincronizado. Chatwoot recibe notificación para gestión manual.
-                      </div>
-                      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                        {["Sale del flujo auto", "Entra en Twenty CRM", "Notif. Chatwoot"].map((t, i) => (
-                          <span key={i} className="step-badge badge-green">{t}</span>
-                        ))}
+                        <div className="seq-subject">{item.subject}</div>
+                        <div className="seq-hook">{item.hook}</div>
+                        {item.trigger && <div className="seq-trigger">↳ {item.trigger}</div>}
                       </div>
                     </div>
-
-                    <div className="card" style={{ marginBottom: 16 }}>
-                      <div style={{ fontWeight: 800, fontSize: 14, color: C.gray, marginBottom: 12 }}>○ Si no responde en 30 días</div>
-                      <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.65, marginBottom: 12 }}>
-                        Empresa archivada. Entra en lista de reactivación automática a los 6 meses con secuencia actualizada. No se considera lead muerto — muchas empresas responden en el segundo intento.
-                      </div>
-                      <div style={{ display: "flex", gap: 8 }}>
-                        <span className="step-badge badge-amber">Archivo D30</span>
-                        <span className="step-badge badge-amber">Reactivación M6</span>
-                      </div>
-                    </div>
-
-                    <div className="card" style={{ marginBottom: 16 }}>
-                      <div style={{ fontWeight: 800, fontSize: 14, color: C.fundae, marginBottom: 12 }}>⚡ Bifurcación España vs LATAM</div>
-                      <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.65, marginBottom: 12 }}>
-                        El campo "país" en el CRM activa o desactiva automáticamente el email D10 (FUNDAE). En LATAM ese slot se sustituye por el email de acuerdo corporativo por volumen.
-                        El resto de la secuencia es idéntico.
-                      </div>
-                      <div style={{ display: "flex", gap: 8 }}>
-                        <span className="step-badge badge-fundae">D10 → FUNDAE (ES)</span>
-                        <span className="step-badge badge-latam">D10 → Volumen (LATAM)</span>
-                      </div>
-                    </div>
-
-                    <div className="card">
-                      <div style={{ fontWeight: 800, fontSize: 14, color: C.amber, marginBottom: 12 }}>📊 Métricas que rastreamos</div>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                        {[
-                          { label: "Tasa apertura emails", target: ">35%", color: C.accent },
-                          { label: "Tasa respuesta total", target: ">8%", color: C.accent },
-                          { label: "Lead → convenio", target: ">20%", color: C.blue },
-                          { label: "Convenio → FUNDAE/venta", target: ">15%", color: C.fundae },
-                          { label: "Embajadores activos", target: ">30 Q4", color: C.amber },
-                          { label: "Revenue por empresa", target: ">€8k/año", color: C.amber },
-                        ].map((m, i) => (
-                          <div key={i} style={{ padding: "8px 12px", background: "rgba(0,0,0,0.3)", borderRadius: 4, border: `1px solid ${C.border}` }}>
-                            <div style={{ fontSize: 11, color: C.gray, marginBottom: 2 }}>{m.label}</div>
-                            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 14, fontWeight: 700, color: m.color }}>{m.target}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-            )}
 
-            {tab === "economia" && (
               <div>
-                <div className="sec-header">
-                  <div className="sec-eyebrow">Economía · Por qué este canal es el mejor del stack</div>
-                  <h2 className="sec-title">Comparativa de canales y eficiencia del B2B</h2>
-                  <p className="sec-desc">
-                    El canal de ads actual tiene un CPA de €416 y ROAS estimado de 11,5x.
-                    El canal embajador cuesta €244 por matrícula y el canal FUNDAE tiene coste de adquisición
-                    equivalente al outreach (~€30-50 por empresa contactada). La matemática es clara.
-                  </p>
-                </div>
-
-                <div className="econ-grid">
-                  <div className="econ-card green">
-                    <div className="econ-label">Canal embajador · CAC</div>
-                    <div className="econ-val green">€244</div>
-                    <div className="econ-sub">5% comisión sobre ticket medio €4.881. Sin coste de ads. Alumno llega precalificado por la empresa.</div>
-                    <div className="econ-vs">
-                      <span>vs canal ads</span>
-                      <span className="econ-vs-val" style={{ color: C.accent }}>−41%</span>
-                    </div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.2em", color: C.gray, textTransform: "uppercase", marginBottom: 20 }}>Lógica de bifurcación</div>
+                <div className="card" style={{ marginBottom: 16 }}>
+                  <div style={{ fontWeight: 800, fontSize: 14, color: C.accent, marginBottom: 12 }}>✓ Si responde en cualquier punto</div>
+                  <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.65, marginBottom: 12 }}>
+                    Sale inmediatamente del flujo automático. Entra en Twenty CRM como oportunidad activa con todo el historial de interacción sincronizado. Chatwoot recibe notificación para gestión manual.
                   </div>
-                  <div className="econ-card fundae">
-                    <div className="econ-label">Canal FUNDAE · CAC estimado</div>
-                    <div className="econ-val fundae">~€40</div>
-                    <div className="econ-sub">Coste de outreach por empresa contactada. Una empresa con 3 empleados = €3.600 revenue. Ratio CAC:revenue excepcional.</div>
-                    <div className="econ-vs">
-                      <span>vs canal ads</span>
-                      <span className="econ-vs-val" style={{ color: C.fundae }}>−90%</span>
-                    </div>
-                  </div>
-                  <div className="econ-card amber">
-                    <div className="econ-label">Margen bruto por canal</div>
-                    <div className="econ-val amber">€4.149</div>
-                    <div className="econ-sub">Margen canal embajador por matrícula Masters (€4.393 revenue − €244 comisión). Vs €4.465 canal ads — diferencia de solo €316 pero sin gastar €416 en ads.</div>
-                    <div className="econ-vs">
-                      <span>ahorro neto</span>
-                      <span className="econ-vs-val" style={{ color: C.amber }}>+€172/mat.</span>
-                    </div>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {["Sale del flujo auto", "Entra en Twenty CRM", "Notif. Chatwoot"].map((t, i) => (
+                      <span key={i} className="step-badge badge-green">{t}</span>
+                    ))}
                   </div>
                 </div>
 
-                <div className="case-study" style={{ marginBottom: 24 }}>
-                  <div>
-                    <div className="case-label">Caso práctico · Una sola empresa bien trabajada</div>
-                    <h3 className="case-title">Gimnasio con 25 empleados del sector</h3>
-                    <p className="case-desc">
-                      Gimnasio con 25 empleados, 3 con créditos FUNDAE disponibles y 5 empleados interesados en formación particular.
-                      La empresa entra como embajador activo y genera 8 matrículas adicionales de su red en el primer año.
-                    </p>
-                    <div className="case-breakdown">
-                      {[
-                        { label: "FUNDAE (3 emp)", val: "€3.600", color: C.fundae },
-                        { label: "Emp. particulares (5)", val: "€21.965", color: C.blue },
-                        { label: "Embajador comisión", val: "−€1.097", color: C.red },
-                        { label: "Revenue neto", val: "€24.468", color: C.accent },
-                      ].map((item, i) => (
-                        <div key={i} className="case-item" style={{ borderColor: item.color + "44" }}>
-                          {item.label}: <span style={{ color: item.color }}>{item.val}</span>
-                        </div>
-                      ))}
-                    </div>
+                <div className="card" style={{ marginBottom: 16 }}>
+                  <div style={{ fontWeight: 800, fontSize: 14, color: C.gray, marginBottom: 12 }}>○ Si no responde en 30 días</div>
+                  <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.65, marginBottom: 12 }}>
+                    Empresa archivada. Entra en lista de reactivación automática a los 6 meses con secuencia actualizada. No se considera lead muerto — muchas empresas responden en el segundo intento.
                   </div>
-                  <div className="case-total">
-                    <div className="case-total-label">Revenue total · 1 empresa · 1 año</div>
-                    <div className="case-total-val">€24k</div>
-                    <div className="case-total-sub">CAC de outreach: ~€50<br />Con canal ads: habría costado €3.328 en ads</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <span className="step-badge badge-amber">Archivo D30</span>
+                    <span className="step-badge badge-amber">Reactivación M6</span>
+                  </div>
+                </div>
+
+                <div className="card" style={{ marginBottom: 16 }}>
+                  <div style={{ fontWeight: 800, fontSize: 14, color: C.fundae, marginBottom: 12 }}>⚡ Bifurcación España vs LATAM</div>
+                  <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.65, marginBottom: 12 }}>
+                    El campo "país" en el CRM activa o desactiva automáticamente el email D10 (FUNDAE). En LATAM ese slot se sustituye por el email de acuerdo corporativo por volumen.
+                    El resto de la secuencia es idéntico.
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <span className="step-badge badge-fundae">D10 → FUNDAE (ES)</span>
+                    <span className="step-badge badge-latam">D10 → Volumen (LATAM)</span>
                   </div>
                 </div>
 
                 <div className="card">
-                  <div className="card-label" style={{ color: C.accent }}>Proyección B2B 2026 · Por trimestre</div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 12 }}>
+                  <div style={{ fontWeight: 800, fontSize: 14, color: C.amber, marginBottom: 12 }}>📊 Métricas que rastreamos</div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                     {[
-                      { q: "Q2", empresas: 20, mat: 40, rev: "€120k", note: "Primeras 20 empresas. FUNDAE + Embajadores early adopters.", color: C.fundae },
-                      { q: "Q3", empresas: 60, mat: 120, rev: "€360k", note: "FUNDAE escalando. Renovaciones primer ciclo. Pipeline activo.", color: C.accent },
-                      { q: "Q4", empresas: 100, mat: 200, rev: "€600k", note: "Embajadores activos. Renovaciones FUNDAE. Primer pipeline LATAM.", color: C.amber },
-                      { q: "Total", empresas: 100, mat: 360, rev: "€1.08M", note: "Escenario optimista. Escenario base: 150 empresas · €216k.", color: C.blue },
-                    ].map((item, i) => (
-                      <div key={i} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 6, padding: 16, border: `1px solid ${item.color}22` }}>
-                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: item.color, marginBottom: 6 }}>{item.q} 2026</div>
-                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 24, fontWeight: 700, color: item.color, marginBottom: 4 }}>{item.rev}</div>
-                        <div style={{ fontSize: 11, color: C.gray, marginBottom: 8 }}>{item.empresas} empresas · {item.mat} matrículas est.</div>
-                        <div style={{ fontSize: 11, color: C.grayLight, lineHeight: 1.5 }}>{item.note}</div>
+                      { label: "Tasa apertura emails", target: ">35%", color: C.accent },
+                      { label: "Tasa respuesta total", target: ">8%", color: C.accent },
+                      { label: "Lead → convenio", target: ">20%", color: C.blue },
+                      { label: "Convenio → FUNDAE/venta", target: ">15%", color: C.fundae },
+                      { label: "Embajadores activos", target: ">30 Q4", color: C.amber },
+                      { label: "Revenue por empresa", target: ">€8k/año", color: C.amber },
+                    ].map((m, i) => (
+                      <div key={i} style={{ padding: "8px 12px", background: "rgba(0,0,0,0.3)", borderRadius: 4, border: `1px solid ${C.border}` }}>
+                        <div style={{ fontSize: 11, color: C.gray, marginBottom: 2 }}>{m.label}</div>
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 14, fontWeight: 700, color: m.color }}>{m.target}</div>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+        )}
 
-            {tab === "segmentos" && (
+        {tab === "economia" && (
+          <div>
+            <div className="sec-header">
+              <div className="sec-eyebrow">Economía · Por qué este canal es el mejor del stack</div>
+              <h2 className="sec-title">Comparativa de canales y eficiencia del B2B</h2>
+              <p className="sec-desc">
+                El canal de ads actual tiene un CPA de €416. El canal embajador cuesta €244 por matrícula.
+                El canal FUNDAE modular tiene tickets de €400-900 por módulo con CAC de €80-150 (outreach + gestión comercial)
+                — pero el LTV del cliente incluye el upgrade al máster completo.
+              </p>
+            </div>
+
+            <div className="econ-grid">
+              <div className="econ-card green">
+                <div className="econ-label">Canal embajador · CAC</div>
+                <div className="econ-val green">€244</div>
+                <div className="econ-sub">5% comisión sobre ticket medio €4.881. Sin coste de ads. Alumno llega precalificado por la empresa.</div>
+                <div className="econ-vs">
+                  <span>vs canal ads</span>
+                  <span className="econ-vs-val" style={{ color: C.accent }}>−41%</span>
+                </div>
+              </div>
+              <div className="econ-card fundae">
+                <div className="econ-label">Canal FUNDAE modular · CAC real</div>
+                <div className="econ-val fundae">€80-150</div>
+                <div className="econ-sub">Coste de outreach + gestión comercial por empresa. Ticket módulo: €400-900. LTV si hace upgrade al máster: €3.500-4.500 adicionales.</div>
+                <div className="econ-vs">
+                  <span>vs canal ads</span>
+                  <span className="econ-vs-val" style={{ color: C.fundae }}>−65%</span>
+                </div>
+              </div>
+              <div className="econ-card amber">
+                <div className="econ-label">LTV · módulo FUNDAE + upgrade</div>
+                <div className="econ-val amber">€4.5k</div>
+                <div className="econ-sub">€700 módulo FUNDAE (pagado por empresa) + €3.800 upgrade al máster (pagado por alumno). La empresa financia el CAC de captación.</div>
+                <div className="econ-vs">
+                  <span>LTV canal ads equivalente</span>
+                  <span className="econ-vs-val" style={{ color: C.amber }}>+€172 neto</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="case-study" style={{ marginBottom: 24 }}>
               <div>
-                <div className="sec-header">
-                  <div className="sec-eyebrow">Targeting · A quién vamos a buscar</div>
-                  <h2 className="sec-title">Segmentos de scraping y roadmap de activación</h2>
-                  <p className="sec-desc">
-                    El scraping prioriza los sectores con mayor densidad de empleados del perfil ICEN.
-                    Tier 1 son los que convierten más rápido, Tier 2 tiene más volumen, Tier 3 es LATAM.
-                  </p>
-                </div>
-
-                <div className="seg-grid" style={{ marginBottom: 32 }}>
-                  <div className="seg-tier t1">
-                    <div className="seg-header">
-                      <div className="seg-tier-badge">TIER 1</div>
-                      <div>
-                        <div className="seg-tier-name">Alta conversión · España</div>
-                        <div className="seg-tier-sub">Emplean exactamente el perfil ICEN</div>
-                      </div>
-                    </div>
-                    <div className="seg-body">
-                      {[
-                        { name: "Gimnasios y centros deportivos", why: "Emplean entrenadores personales y monitores. Perfil ideal para PEAC y Masters TECH." },
-                        { name: "Clínicas de fisioterapia", why: "Alta demanda de TSD Dietética y Masters nutrición. Empleados con motivación de crecimiento." },
-                        { name: "Centros de nutrición y dietética", why: "Empleados directamente relacionados con el catálogo FP y Masters." },
-                        { name: "Clubs deportivos (pro y semipro)", why: "Cuerpos técnicos, preparadores físicos, nutricionistas. Múltiples perfiles en una empresa." },
-                        { name: "Federaciones deportivas", why: "Muchos empleados, presupuesto para formación, FUNDAE elevado." },
-                      ].map((s, i) => (
-                        <div key={i} className="seg-item">
-                          <div className="seg-dot-t" />
-                          <div className="seg-item-text">
-                            <div className="seg-item-name">{s.name}</div>
-                            <div className="seg-item-why">{s.why}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="seg-tier t2">
-                    <div className="seg-header">
-                      <div className="seg-tier-badge">TIER 2</div>
-                      <div>
-                        <div className="seg-tier-name">Alto volumen · España</div>
-                        <div className="seg-tier-sub">Mayor ciclo de venta pero más escala</div>
-                      </div>
-                    </div>
-                    <div className="seg-body">
-                      {[
-                        { name: "Hoteles con spa/wellness", why: "Monitores, técnicos de actividad física, nutricionistas. Grandes cadenas = muchos empleados." },
-                        { name: "Mutuas laborales", why: "Programas de salud laboral. FUNDAE elevado. Decisión en RRHH, ciclo más largo." },
-                        { name: "Centros educativos (EF)", why: "Profesores de EF con interés en formación continua. Motivación intrínseca alta." },
-                        { name: "Cadenas de farmacias", why: "Nutricionistas y dietistas empleados. FP Dietética encaja perfectamente." },
-                        { name: "Residencias y centros de día", why: "Fisioterapeutas y técnicos de actividad. FUNDAE disponible y subuso." },
-                      ].map((s, i) => (
-                        <div key={i} className="seg-item">
-                          <div className="seg-dot-t" />
-                          <div className="seg-item-text">
-                            <div className="seg-item-name">{s.name}</div>
-                            <div className="seg-item-why">{s.why}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="seg-tier t3">
-                    <div className="seg-header">
-                      <div className="seg-tier-badge">TIER 3</div>
-                      <div>
-                        <div className="seg-tier-name">LATAM · Q3 activación</div>
-                        <div className="seg-tier-sub">Corporate track · Acuerdo por volumen</div>
-                      </div>
-                    </div>
-                    <div className="seg-body">
-                      {[
-                        { name: "Cadenas de gimnasios MX/CO/CL", why: "Smartfit, Bodytech, Elefante. Miles de empleados. Corporate deal con descuento por volumen." },
-                        { name: "Clínicas privadas multisede", why: "Colombia y México tienen redes grandes. Nutricionistas y fisios buscando titulación española." },
-                        { name: "Federaciones deportivas nacionales", why: "México, Colombia, Chile tienen federaciones con presupuesto de formación." },
-                        { name: "Empresas tech wellness", why: "Apps de salud, plataformas de nutrición. Empleados del sector con titulaciones europeas como diferencial." },
-                        { name: "Universidades y postgrados", why: "Convenios institucionales para referir alumnos a los Masters ICEN como complemento." },
-                      ].map((s, i) => (
-                        <div key={i} className="seg-item">
-                          <div className="seg-dot-t" />
-                          <div className="seg-item-text">
-                            <div className="seg-item-name">{s.name}</div>
-                            <div className="seg-item-why">{s.why}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.2em", color: C.gray, textTransform: "uppercase", marginBottom: 16 }}>Roadmap de activación · 2026</div>
-                <div className="roadmap-grid">
+                <div className="case-label">Caso práctico · Una sola empresa bien trabajada</div>
+                <h3 className="case-title">Gimnasio con 15 empleados del sector</h3>
+                <p className="case-desc">
+                  Gimnasio con 15 empleados. 3 hacen módulos FUNDAE (crédito empresa: ~€1.200 total).
+                  De esos 3, 2 hacen upgrade al máster completo pagando la diferencia. 4 empleados adicionales
+                  se matriculan por cuenta propia vía código embajador de la empresa.
+                </p>
+                <div className="case-breakdown">
                   {[
-                    {
-                      q: "Q1", sub: "ene–mar", target: "Setup", targetColor: C.blue,
-                      items: [
-                        "Herramienta BRTHLS → servidores ICEN desplegada",
-                        "Scraping Tier 1: ≥5.000 empresas España estructuradas",
-                        "Secuencia n8n D0-D21 configurada y probada",
-                        "Twenty CRM pipeline B2B separado del B2C",
-                        "Templates email y LinkedIn aprobados",
-                      ],
-                      bar: C.blue
-                    },
-                    {
-                      q: "Q2", sub: "abr–jun", target: "Lanzar", targetColor: C.fundae,
-                      items: [
-                        "Outreach activo: 500 empresas/mes contactadas",
-                        "Primeras 20 empresas con convenio firmado",
-                        "FUNDAE: primeras 10 empresas activas",
-                        "Primeros 5 embajadores con código activo en CRM",
-                        "Scraping Tier 2 y primeros LATAM",
-                      ],
-                      bar: C.fundae
-                    },
-                    {
-                      q: "Q3", sub: "jul–sep", target: "Escalar", targetColor: C.accent,
-                      items: [
-                        "60 empresas activas (FUNDAE + Embajadores)",
-                        "Activar Tier 3 LATAM: MX, CO, CL",
-                        "Corporate deals con 3+ cadenas de gimnasios LATAM",
-                        "Renovaciones primer ciclo FUNDAE",
-                        "Iteración herramienta según conversión real",
-                      ],
-                      bar: C.accent
-                    },
-                    {
-                      q: "Q4", sub: "oct–dic", target: "Consolidar", targetColor: C.amber,
-                      items: [
-                        "100 empresas activas en pipeline",
-                        "30+ embajadores activos generando referidos",
-                        "Renovación FUNDAE 2027 ya en negociación",
-                        "LATAM: pipeline corporativo Q1 2027 construido",
-                        "Explorar SENCE/SENA acreditación si viabilidad",
-                      ],
-                      bar: C.amber
-                    },
-                  ].map((qr, i) => (
-                    <div key={i} className="roadmap-q">
-                      <div className="roadmap-q-header">
-                        <div>
-                          <div className="roadmap-q-name">{qr.q} 2026</div>
-                          <div className="roadmap-q-sub">{qr.sub}</div>
-                        </div>
-                        <div className="roadmap-q-target" style={{ color: qr.targetColor }}>{qr.target}</div>
-                      </div>
-                      <div className="roadmap-q-body">
-                        {qr.items.map((item, j) => (
-                          <div key={j} className="roadmap-item">
-                            <div className="roadmap-dot" style={{ background: qr.bar }} />
-                            <div style={{ color: C.grayLight }}>{item}</div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="roadmap-q-bar" style={{ background: `linear-gradient(90deg, ${qr.bar}, transparent)` }} />
+                    { label: "Módulos FUNDAE (3 emp × €400)", val: "€1.200", color: C.fundae },
+                    { label: "Upgrade al máster (2 emp × ~€4.200)", val: "€8.400", color: C.blue },
+                    { label: "Emp. embajador (4 × €4.881 × 90%)", val: "€17.572", color: C.accent },
+                    { label: "Comisión empresa (5%)", val: "−€877", color: C.red },
+                  ].map((item, i) => (
+                    <div key={i} className="case-item" style={{ borderColor: item.color + "44" }}>
+                      {item.label}: <span style={{ color: item.color }}>{item.val}</span>
                     </div>
                   ))}
                 </div>
               </div>
-            )}
+              <div className="case-total">
+                <div className="case-total-label">Revenue total · 1 empresa · 1 año</div>
+                <div className="case-total-val">€26k</div>
+                <div className="case-total-sub">CAC outreach estimado: ~€120<br />La empresa financia su propia captación vía FUNDAE</div>
+              </div>
+            </div>
 
-          </main>
-        </div>
-      </div>
+            <div className="card">
+              <div className="card-label" style={{ color: C.accent }}>Proyección B2B 2026 · Por trimestre</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 12 }}>
+                {[
+                  { q: "Q2", empresas: 20, mat: 40, rev: "€120k", note: "Primeras 20 empresas. FUNDAE + Embajadores early adopters.", color: C.fundae },
+                  { q: "Q3", empresas: 60, mat: 120, rev: "€360k", note: "FUNDAE escalando. Renovaciones primer ciclo. Pipeline activo.", color: C.accent },
+                  { q: "Q4", empresas: 100, mat: 200, rev: "€600k", note: "Embajadores activos. Renovaciones FUNDAE. Primer pipeline LATAM.", color: C.amber },
+                  { q: "Total", empresas: 100, mat: 360, rev: "€1.08M", note: "Escenario optimista. Escenario base: 150 empresas · €216k.", color: C.blue },
+                ].map((item, i) => (
+                  <div key={i} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 6, padding: 16, border: `1px solid ${item.color}22` }}>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: item.color, marginBottom: 6 }}>{item.q} 2026</div>
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 24, fontWeight: 700, color: item.color, marginBottom: 4 }}>{item.rev}</div>
+                    <div style={{ fontSize: 11, color: C.gray, marginBottom: 8 }}>{item.empresas} empresas · {item.mat} matrículas est.</div>
+                    <div style={{ fontSize: 11, color: C.grayLight, lineHeight: 1.5 }}>{item.note}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {tab === "segmentos" && (
+          <div>
+            <div className="sec-header">
+              <div className="sec-eyebrow">Targeting · A quién vamos a buscar</div>
+              <h2 className="sec-title">Segmentos de scraping y roadmap de activación</h2>
+              <p className="sec-desc">
+                El scraping prioriza los sectores con mayor densidad de empleados del perfil ICEN.
+                Tier 1 son los que convierten más rápido, Tier 2 tiene más volumen, Tier 3 es LATAM.
+              </p>
+            </div>
+
+            <div className="seg-grid" style={{ marginBottom: 32 }}>
+              <div className="seg-tier t1">
+                <div className="seg-header">
+                  <div className="seg-tier-badge">TIER 1</div>
+                  <div>
+                    <div className="seg-tier-name">Alta conversión · España</div>
+                    <div className="seg-tier-sub">Emplean exactamente el perfil ICEN</div>
+                  </div>
+                </div>
+                <div className="seg-body">
+                  {[
+                    { name: "Gimnasios y centros deportivos", why: "Emplean entrenadores personales y monitores. Perfil ideal para PEAC y Masters TECH." },
+                    { name: "Clínicas de fisioterapia", why: "Alta demanda de TSD Dietética y Masters nutrición. Empleados con motivación de crecimiento." },
+                    { name: "Centros de nutrición y dietética", why: "Empleados directamente relacionados con el catálogo FP y Masters." },
+                    { name: "Clubs deportivos (pro y semipro)", why: "Cuerpos técnicos, preparadores físicos, nutricionistas. Múltiples perfiles en una empresa." },
+                    { name: "Federaciones deportivas", why: "Muchos empleados, presupuesto para formación, FUNDAE elevado." },
+                  ].map((s, i) => (
+                    <div key={i} className="seg-item">
+                      <div className="seg-dot-t" />
+                      <div className="seg-item-text">
+                        <div className="seg-item-name">{s.name}</div>
+                        <div className="seg-item-why">{s.why}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="seg-tier t2">
+                <div className="seg-header">
+                  <div className="seg-tier-badge">TIER 2</div>
+                  <div>
+                    <div className="seg-tier-name">Alto volumen · España</div>
+                    <div className="seg-tier-sub">Mayor ciclo de venta pero más escala</div>
+                  </div>
+                </div>
+                <div className="seg-body">
+                  {[
+                    { name: "Hoteles con spa/wellness", why: "Monitores, técnicos de actividad física, nutricionistas. Grandes cadenas = muchos empleados." },
+                    { name: "Mutuas laborales", why: "Programas de salud laboral. FUNDAE elevado. Decisión en RRHH, ciclo más largo." },
+                    { name: "Centros educativos (EF)", why: "Profesores de EF con interés en formación continua. Motivación intrínseca alta." },
+                    { name: "Cadenas de farmacias", why: "Nutricionistas y dietistas empleados. FP Dietética encaja perfectamente." },
+                    { name: "Residencias y centros de día", why: "Fisioterapeutas y técnicos de actividad. FUNDAE disponible y subuso." },
+                  ].map((s, i) => (
+                    <div key={i} className="seg-item">
+                      <div className="seg-dot-t" />
+                      <div className="seg-item-text">
+                        <div className="seg-item-name">{s.name}</div>
+                        <div className="seg-item-why">{s.why}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="seg-tier t3">
+                <div className="seg-header">
+                  <div className="seg-tier-badge">TIER 3</div>
+                  <div>
+                    <div className="seg-tier-name">LATAM · Q3 activación</div>
+                    <div className="seg-tier-sub">Corporate track · Acuerdo por volumen</div>
+                  </div>
+                </div>
+                <div className="seg-body">
+                  {[
+                    { name: "Cadenas de gimnasios MX/CO/CL", why: "Smartfit, Bodytech, Elefante. Miles de empleados. Corporate deal con descuento por volumen." },
+                    { name: "Clínicas privadas multisede", why: "Colombia y México tienen redes grandes. Nutricionistas y fisios buscando titulación española." },
+                    { name: "Federaciones deportivas nacionales", why: "México, Colombia, Chile tienen federaciones con presupuesto de formación." },
+                    { name: "Empresas tech wellness", why: "Apps de salud, plataformas de nutrición. Empleados del sector con titulaciones europeas como diferencial." },
+                    { name: "Universidades y postgrados", why: "Convenios institucionales para referir alumnos a los Masters ICEN como complemento." },
+                  ].map((s, i) => (
+                    <div key={i} className="seg-item">
+                      <div className="seg-dot-t" />
+                      <div className="seg-item-text">
+                        <div className="seg-item-name">{s.name}</div>
+                        <div className="seg-item-why">{s.why}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.2em", color: C.gray, textTransform: "uppercase", marginBottom: 16 }}>Roadmap de activación · 2026</div>
+            <div className="roadmap-grid">
+              {[
+                {
+                  q: "Q1", sub: "ene–mar", target: "Setup", targetColor: C.blue,
+                  items: [
+                    "Herramienta BRTHLS → servidores ICEN desplegada",
+                    "Scraping Tier 1: ≥5.000 empresas España estructuradas",
+                    "Secuencia n8n D0-D21 configurada y probada",
+                    "Twenty CRM pipeline B2B separado del B2C",
+                    "Templates email y LinkedIn aprobados",
+                  ],
+                  bar: C.blue
+                },
+                {
+                  q: "Q2", sub: "abr–jun", target: "Lanzar", targetColor: C.fundae,
+                  items: [
+                    "Outreach activo: 500 empresas/mes contactadas",
+                    "Primeras 20 empresas con convenio firmado",
+                    "FUNDAE: primeras 10 empresas activas",
+                    "Primeros 5 embajadores con código activo en CRM",
+                    "Scraping Tier 2 y primeros LATAM",
+                  ],
+                  bar: C.fundae
+                },
+                {
+                  q: "Q3", sub: "jul–sep", target: "Escalar", targetColor: C.accent,
+                  items: [
+                    "60 empresas activas (FUNDAE + Embajadores)",
+                    "Activar Tier 3 LATAM: MX, CO, CL",
+                    "Corporate deals con 3+ cadenas de gimnasios LATAM",
+                    "Renovaciones primer ciclo FUNDAE",
+                    "Iteración herramienta según conversión real",
+                  ],
+                  bar: C.accent
+                },
+                {
+                  q: "Q4", sub: "oct–dic", target: "Consolidar", targetColor: C.amber,
+                  items: [
+                    "100 empresas activas en pipeline",
+                    "30+ embajadores activos generando referidos",
+                    "Renovación FUNDAE 2027 ya en negociación",
+                    "LATAM: pipeline corporativo Q1 2027 construido",
+                    "Explorar SENCE/SENA acreditación si viabilidad",
+                  ],
+                  bar: C.amber
+                },
+              ].map((qr, i) => (
+                <div key={i} className="roadmap-q">
+                  <div className="roadmap-q-header">
+                    <div>
+                      <div className="roadmap-q-name">{qr.q} 2026</div>
+                      <div className="roadmap-q-sub">{qr.sub}</div>
+                    </div>
+                    <div className="roadmap-q-target" style={{ color: qr.targetColor }}>{qr.target}</div>
+                  </div>
+                  <div className="roadmap-q-body">
+                    {qr.items.map((item, j) => (
+                      <div key={j} className="roadmap-item">
+                        <div className="roadmap-dot" style={{ background: qr.bar }} />
+                        <div style={{ color: C.grayLight }}>{item}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="roadmap-q-bar" style={{ background: `linear-gradient(90deg, ${qr.bar}, transparent)` }} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </main>
+    </div >
+      </div >
     </>
   );
 }

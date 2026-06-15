@@ -1,6 +1,13 @@
 export function proxy(request) {
   const user = process.env.ICEN_B2B_BASIC_USER;
   const password = process.env.ICEN_B2B_BASIC_PASSWORD;
+  const monitorToken = process.env.ICEN_PAYMENT_MONITOR_TOKEN;
+
+  if (monitorToken) {
+    const { pathname, searchParams } = new URL(request.url);
+    const providedToken = request.headers.get("x-icen-monitor-token") || searchParams.get("token");
+    if (pathname === "/api/holded/payment-monitor" && providedToken === monitorToken) return;
+  }
 
   if (!user || !password) return;
 

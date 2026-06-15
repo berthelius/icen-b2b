@@ -14,8 +14,16 @@ const stages = [
   { id: "perdido", label: "Perdido" },
 ];
 
+const proposalStatusOptions = [
+  { id: "draft", label: "Borrador" },
+  { id: "sent", label: "Enviada" },
+  { id: "accepted", label: "Aceptada" },
+  { id: "lost", label: "Perdida" },
+];
+
 export default function SalesBackend() {
   const [leads, setLeads] = useState([]);
+  const [proposalRecords, setProposalRecords] = useState([]);
   const [source, setSource] = useState("cargando");
   const [selectedLeadId, setSelectedLeadId] = useState("");
   const [selectedCourseIds, setSelectedCourseIds] = useState([]);
@@ -23,6 +31,7 @@ export default function SalesBackend() {
   const [payroll, setPayroll] = useState("");
   const [proposal, setProposal] = useState(null);
   const [proforma, setProforma] = useState(null);
+  const [paymentState, setPaymentState] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [busyAction, setBusyAction] = useState("");
 
@@ -48,10 +57,33 @@ export default function SalesBackend() {
     return () => { alive = false; };
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/proposals")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!alive) return;
+        if (data.ok) setProposalRecords(data.proposals || []);
+      })
+      .catch(() => {
+        if (alive) setProposalRecords([]);
+      });
+    return () => { alive = false; };
+  }, []);
+
   const selectedLead = useMemo(
     () => leads.find((lead) => lead.id === selectedLeadId) || leads[0] || null,
     [leads, selectedLeadId],
   );
+
+  const currentRecord = useMemo(() => {
+    if (proposal?.id) {
+      const byProposal = proposalRecords.find((record) => record.id === proposal.id);
+      if (byProposal) return byProposal;
+    }
+    if (!selectedLead) return null;
+    return proposalRecords.find((record) => record.leadId === selectedLead.id) || null;
+  }, [proposal?.id, proposalRecords, selectedLead]);
 
   useEffect(() => {
     if (!selectedLead) return;
@@ -59,6 +91,7 @@ export default function SalesBackend() {
     setPayroll("");
     setProposal(null);
     setProforma(null);
+    setPaymentState(null);
     const suggested = recommendCourses({
       sectorFamily: selectedLead.sectorFamily,
       employeeCount: selectedLead.employeeCount,
@@ -66,6 +99,24 @@ export default function SalesBackend() {
     }).slice(0, 3).map((course) => course.id);
     setSelectedCourseIds(suggested);
   }, [selectedLead]);
+
+  useEffect(() => {
+    if (!currentRecord) return;
+    setProposal({
+      ...(currentRecord.proposal || {}),
+      id: currentRecord.id,
+      status: currentRecord.status,
+    });
+    setProforma(currentRecord.holded || null);
+    setPaymentState({
+      status: currentRecord.paymentStatus || "pending",
+      paidAt: currentRecord.paidAt || "",
+      notifiedAt: currentRecord.paymentNotifiedAt || "",
+      rawStatus: currentRecord.holded?.status || "",
+    });
+    const savedCourseIds = currentRecord.proposal?.courses?.map((course) => course.id).filter(Boolean) || [];
+    if (savedCourseIds.length) setSelectedCourseIds(savedCourseIds);
+  }, [currentRecord?.id, currentRecord?.status, currentRecord?.paymentStatus, currentRecord?.paymentNotifiedAt, currentRecord?.holded?.status]);
 
   const selectedCourses = useMemo(
     () => courses.filter((course) => selectedCourseIds.includes(course.id)),
@@ -83,12 +134,20 @@ export default function SalesBackend() {
     });
   }, [selectedLead, employeeCount, payroll, selectedCourseIds, proposal?.status]);
 
+  const activeProforma = proforma || currentRecord?.holded || null;
+  const displayedPaymentState = paymentState || (currentRecord ? {
+    status: currentRecord.paymentStatus || "pending",
+    paidAt: currentRecord.paidAt || "",
+    notifiedAt: currentRecord.paymentNotifiedAt || "",
+    rawStatus: currentRecord.holded?.status || "",
+  } : null);
+
   const dashboard = useMemo(() => ({
     hot: leads.filter((lead) => lead.leadPriority === "hot").length,
     pending: leads.filter((lead) => !["ganado", "perdido"].includes(lead.stage)).length,
     needsContact: leads.filter((lead) => lead.stage === "nuevo").length,
-    withProposal: leads.filter((lead) => lead.stage === "propuesta").length + (proposal ? 1 : 0),
-  }), [leads, proposal]);
+    withProposal: proposalRecords.length + (proposal && !proposalRecords.some((record) => record.id === proposal.id) ? 1 : 0),
+  }), [leads, proposal, proposalRecords]);
 
   function toggleCourse(courseId) {
     setSelectedCourseIds((current) =>
@@ -116,6 +175,7 @@ export default function SalesBackend() {
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || "Error al generar propuesta");
       setProposal(data.proposal);
+      setProposalRecords((current) => upsertRecord(current, data.record));
       setStatusMessage(`Propuesta registrada: ${data.proposal.summary}`);
     } catch (error) {
       setStatusMessage(error.message);
@@ -139,6 +199,13 @@ export default function SalesBackend() {
       if (!data.ok) throw new Error(data.error || "Error al crear proforma");
       setProforma(data.holded);
       setProposal(data.proposal);
+      setPaymentState({
+        status: data.record?.paymentStatus || "pending",
+        paidAt: data.record?.paidAt || "",
+        notifiedAt: data.record?.paymentNotifiedAt || "",
+        rawStatus: data.record?.holded?.status || data.holded?.status || "",
+      });
+      setProposalRecords((current) => upsertRecord(current, data.record));
       setStatusMessage(data.holded.mode === "dry-run"
         ? "Proforma simulada. Configura HOLDED_API_KEY para crearla en Holded."
         : `Proforma Holded creada: ${data.holded.proformaId}`);
@@ -173,7 +240,7 @@ export default function SalesBackend() {
 
   async function syncPayment() {
     const activeProposal = proposal || localProposal;
-    if (!activeProposal || !proforma?.proformaId) return;
+    if (!activeProposal || !activeProforma?.proformaId) return;
     setBusyAction("payment");
     setStatusMessage("");
     try {
@@ -183,14 +250,48 @@ export default function SalesBackend() {
         body: JSON.stringify({
           lead: selectedLead,
           proposal: activeProposal,
-          proformaId: proforma.proformaId,
+          proformaId: activeProforma.proformaId,
         }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || "Error al sincronizar pago");
+      setPaymentState({
+        status: data.record?.paymentStatus || (data.status.paid ? "paid" : "pending"),
+        paidAt: data.record?.paidAt || "",
+        notifiedAt: data.record?.paymentNotifiedAt || data.accounting?.notifiedAt || "",
+        rawStatus: data.status.status || "",
+      });
+      setProposalRecords((current) => upsertRecord(current, data.record));
       setStatusMessage(data.status.paid
-        ? "Pago detectado. Email enviado al cliente desde backend."
+        ? data.accounting?.skipped
+          ? `Pago detectado. ${data.accounting.reason}.`
+          : "Pago detectado. Contabilidad avisada."
         : `Pago no detectado todavía (${data.status.status || "pendiente"}).`);
+    } catch (error) {
+      setStatusMessage(error.message);
+    } finally {
+      setBusyAction("");
+    }
+  }
+
+  async function changeProposalStatus(status) {
+    const activeProposal = proposal || localProposal;
+    if (!activeProposal) return;
+    setProposal({ ...activeProposal, status });
+
+    if (!proposal?.id) return;
+    setBusyAction(`status-${status}`);
+    setStatusMessage("");
+    try {
+      const res = await fetch(`/api/proposals/${encodeURIComponent(proposal.id)}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "Error al actualizar estado");
+      setProposalRecords((current) => upsertRecord(current, data.record));
+      setStatusMessage(`Estado actualizado: ${proposalStatusOptions.find((item) => item.id === status)?.label || status}`);
     } catch (error) {
       setStatusMessage(error.message);
     } finally {
@@ -350,27 +451,43 @@ export default function SalesBackend() {
             <button disabled={!localProposal || busyAction === "holded"} onClick={createProforma}>
               {busyAction === "holded" ? "Creando..." : "Crear proforma en Holded"}
             </button>
-            <button disabled={!proforma?.proformaId || busyAction === "payment"} onClick={syncPayment}>
-              Sincronizar pago y email cliente
+            <button disabled={!activeProforma?.proformaId || busyAction === "payment"} onClick={syncPayment}>
+              {busyAction === "payment" ? "Comprobando..." : "Comprobar pago y avisar contabilidad"}
             </button>
           </div>
 
-          {proforma && (
+          {activeProforma && (
             <div className="holded-box">
               <strong>Holded</strong>
-              <p>Modo: {proforma.mode} · Proforma: {proforma.proformaId}</p>
-              {proforma.mode === "dry-run" && <p>Configura credenciales para crear y descargar PDF real.</p>}
+              <p>Modo: {activeProforma.mode} · Proforma: {activeProforma.proformaId}</p>
+              {activeProforma.mode === "dry-run" && <p>Configura credenciales para crear y descargar PDF real.</p>}
+            </div>
+          )}
+
+          {displayedPaymentState && (
+            <div className={`payment-box ${displayedPaymentState.status === "paid" ? "paid" : ""}`}>
+              <strong>Pago</strong>
+              <p>
+                Estado: {paymentLabel(displayedPaymentState.status)}
+                {displayedPaymentState.rawStatus ? ` · Holded: ${displayedPaymentState.rawStatus}` : ""}
+              </p>
+              <p>
+                Contabilidad: {displayedPaymentState.notifiedAt
+                  ? `avisada ${formatDateTime(displayedPaymentState.notifiedAt)}`
+                  : "pendiente hasta que Holded marque pagado"}
+              </p>
             </div>
           )}
 
           <div className="proposal-state">
-            {["draft", "sent", "accepted", "lost"].map((status) => (
+            {proposalStatusOptions.map((status) => (
               <button
-                key={status}
-                className={(proposal?.status || "draft") === status ? "state active" : "state"}
-                onClick={() => setProposal((current) => ({ ...(current || localProposal), status }))}
+                key={status.id}
+                className={(proposal?.status || "draft") === status.id ? "state active" : "state"}
+                disabled={busyAction === `status-${status.id}`}
+                onClick={() => changeProposalStatus(status.id)}
               >
-                {status}
+                {status.label}
               </button>
             ))}
           </div>
@@ -398,4 +515,30 @@ function Info({ label, value }) {
       <strong>{value}</strong>
     </div>
   );
+}
+
+function upsertRecord(records, record) {
+  if (!record?.id) return records;
+  const next = records.filter((item) => item.id !== record.id);
+  return [record, ...next].sort((a, b) =>
+    String(b.updatedAt || b.createdAt).localeCompare(String(a.updatedAt || a.createdAt)),
+  );
+}
+
+function paymentLabel(status) {
+  if (status === "paid") return "pagado";
+  if (status === "unknown") return "sin confirmar";
+  return "pendiente";
+}
+
+function formatDateTime(value) {
+  if (!value) return "";
+  try {
+    return new Intl.DateTimeFormat("es-ES", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(new Date(value));
+  } catch (_) {
+    return value;
+  }
 }

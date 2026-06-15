@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { buildProposal } from "@/lib/proposal";
 import { createHoldedProforma } from "@/lib/holded";
 import { appendLeadNote } from "@/lib/twenty";
+import { attachHoldedProforma } from "@/lib/store";
 
 export async function POST(request) {
   try {
     const body = await request.json();
     const proposal = body.proposal || buildProposal(body);
     const holded = await createHoldedProforma(proposal);
+    const record = await attachHoldedProforma({ lead: body.lead || {}, proposal, holded });
     await appendLeadNote({
       lead: body.lead || { id: proposal.leadId },
       text: `Proforma Holded ${holded.proformaId} creada para ${proposal.summary}`,
@@ -17,6 +19,7 @@ export async function POST(request) {
       ok: true,
       proposal,
       holded,
+      record,
       downloadUrl: holded.proformaId ? `/api/holded/proforma/${holded.proformaId}/download` : null,
     });
   } catch (error) {

@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { buildProposal } from "@/lib/proposal";
 import { createCloserTask, createFundaeOpportunity, appendLeadNote } from "@/lib/twenty";
+import { listProposalRecords, saveProposalRecord } from "@/lib/store";
+
+export async function GET() {
+  try {
+    const proposals = await listProposalRecords();
+    return NextResponse.json({ ok: true, proposals });
+  } catch (error) {
+    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+  }
+}
 
 export async function POST(request) {
   try {
@@ -21,8 +31,9 @@ export async function POST(request) {
         }),
       }
       : { skipped: true };
+    const record = await saveProposalRecord({ lead: body.lead || {}, proposal, crm });
 
-    return NextResponse.json({ ok: true, proposal, crm });
+    return NextResponse.json({ ok: true, proposal, crm, record });
   } catch (error) {
     return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   }
